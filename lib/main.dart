@@ -37,7 +37,10 @@ class MyHomePage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text("Bloc Demo"),
       ),
-      body: BlocBuilder<CounterCubit, CounterState>(
+      body: BlocConsumer<CounterCubit, CounterState>(
+        listener: (context, state) {
+
+        },
         builder: (context, state) {
           return Center(
             child: Column(
