@@ -7,21 +7,35 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final CounterCubit counterCubit = CounterCubit();
     return MaterialApp(
-      title: 'Anonymous Cubits Routes',
+      title: 'Name Routes Access Cubit',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      initialRoute: '/',
+      routes: {
+        '/counter': (context) =>
+            BlocProvider.value(
+              value: counterCubit,
+              child: CounterPage(),
+            ),
+      },
       home: BlocProvider(
-        create: (context) => CounterCubit(),
+        create: (context) => counterCubit,
         child: MyHomePage(),
       ),
     );
@@ -46,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
             .of(context)
             .colorScheme
             .inversePrimary,
-        title: Text("Anonymous Cubits Routes"),
+        title: Text("Name Routes Access Cubit"),
       ),
       body: Center(
         child: Column(
@@ -54,15 +68,9 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) {
-                      return BlocProvider.value(
-                        value: context.read<CounterCubit>(),
-                        child: CounterPage(),);
-                    },
-                  ),
+                Navigator.pushNamed(
+                    context,
+                    '/counter'
                 );
               },
               child: const Text(
